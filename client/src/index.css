@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,100..900;1,100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+    --color-primary: #004cff;
+    --color-primary-hover: #0033ad;
+    --color-primary-light: #d9e4ff;
+    --color-primary-border: #7a9cff;
+}
+@layer base {
+    * {
+        font-family: "Urbanist", sans-serif;
+        box-sizing: border-box;
+    }
+
+    body {
+        @apply bg-slate-50 text-slate-900 antialiased min-h-screen selection:bg-primary/20 selection:text-primary-hover;
+    }
+}
+
+@keyframes gradient-flow {
+    0%,
+    100% {
+        background-position: 0% 100%;
+    }
+
+    50% {
+        background-position: 100% 0%;
+    }
+}
+
+.animate-gradient-flow {
+    background:
+        radial-gradient(circle at 12% 88%, rgba(124, 58, 237, 0.95) 0%, transparent 48%),
+        radial-gradient(circle at 88% 12%, rgba(37, 99, 235, 0.95) 0%, transparent 48%),
+        radial-gradient(circle at 72% 72%, rgba(236, 72, 153, 0.9) 0%, transparent 52%),
+        #172554;
+    background-size: 180% 180%;
+    animation: gradient-flow 12s ease-in-out infinite;
+}
+
+/* Custom Scrollbar for Light Mode */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
