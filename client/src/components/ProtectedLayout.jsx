@@ -6,7 +6,7 @@ import Footer from "./Footer";
 const ProtectedLayout = () => {
   return (
     <div
-      className="min-h-screen flex flex-col font-sans text-slate-900
+      className="min-h-screen flex flex-col font-sans text-white
                 animate-gradient-flow"
     >
       <Navbar />
