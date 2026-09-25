@@ -8,6 +8,7 @@ import {
 import { dummyStats } from "../assets/asset";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/react";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -18,11 +19,11 @@ const Dashboard = () => {
     user?.primaryEmailAddress?.emailAddress?.split("@")[0] ||
     "User";
 
+  const userEmail = user?.primaryEmailAddress?.emailAddress || "User";
   const navigate = useNavigate();
   const [isCreating, setIsCreating] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const stats = dummyStats;
-
   const [joinId, setJoinId] = useState("");
 
   useEffect(() => {
@@ -30,9 +31,28 @@ const Dashboard = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const handleCreateMeeting = () => {};
+  const handleCreateMeeting = () => {
+    setIsCreating(true)
+    const chars = "abcdefghijklmnopqrstuvwxyz"
+    const seg = () => Array.from({ length: 3 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+    const newMeetingId = `${seg()}-${seg()}-${seg()}`
 
-  const handleJoinMeeting = (e) => {};
+    setTimeout(() => {
+      setIsCreating(false)
+      toast.success("Meeting created!");
+      navigate(`/meeting/${newMeetingId}`)
+    }, 400)
+  };
+
+  const handleJoinMeeting = (e) => { 
+    e.preventDefault();
+    const cleaId = joinId.trim();
+    if(!/^[a-z]{3}(?:-[a-z]{3}){2}$/.test(cleaId)){
+      toast.error("Please enter a valid Meeting ID")
+      return;
+    }
+    navigate(`/meeting/${encodeURIComponent(cleaId)}`)
+  };
 
   return (
     <div className="flex-1 max-w-7xl w-full mx-auto p-6 md:p-12 flex flex-col justify-center">
@@ -55,7 +75,7 @@ const Dashboard = () => {
               <button
                 onClick={handleCreateMeeting}
                 disabled={isCreating}
-                className="bg-purple-400/90 hover:bg-primary-hover text-white/80 font-medium px-6 py-3.5 rounded-full shadow-md shadow-purple-400/20 flex items-center justify-center gap-2.5 transition-all cursor-pointer disabled:opacity-50"
+                className="bg-purple-400/90 hover:bg-primary-hover text-white font-medium px-6 py-3.5 rounded-full shadow-md shadow-purple-400/20 flex items-center justify-center gap-2.5 transition-all cursor-pointer disabled:opacity-50"
               >
                 <PlusIcon className="w-5 h-5" />
                 <span>{isCreating ? "Creating..." : "New Meeting"}</span>
@@ -111,14 +131,28 @@ const Dashboard = () => {
             </div>
 
             <div className="pt-4 border-t border-white/30 text-sm text-white/70">
+
               <div className="flex items-center justify-between py-6 px-4">
+
                 <p className="text-base">
-                  Logged in as: <span className="text-primary">{userName}</span>
+                  Logged in as: <span className="text-primary">{userEmail}</span>
                 </p>
+
                 <span className={`px-4 py-1 rounded-full font-semibold text-xs uppercase ${stats?.plan === "premium" ? "bg-primary text-white" : "bg-white/70 text-slate-900"}`}>
                   {stats.plan || "Free"}
                 </span>
+
               </div>
+              {stats && (
+                <div className="w-full bg-white/50 rounded-2xl px-5 py-4 border border-slate-100">
+                  <div className="flex items-center justify-between text-sm text-slate-600">
+                    <span>Monthly Meetings</span>
+                    <span className="text-xs font-mono">
+                      {stats.monthlyLimit ? `${stats.monthlyCount} / ${stats.monthlyLimit} Used` : `${stats.monthlyCount} Created (Unlimited)`}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
