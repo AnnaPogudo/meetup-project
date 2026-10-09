@@ -4,6 +4,7 @@ import { dummySessions } from "../assets/asset";
 import { useNavigate, Link } from "react-router-dom";
 import EmptySessions from "../components/sessions/EmptySessions";
 import SessionCard from "../components/sessions/SessionCard";
+import SessionDetailModal from "../components/sessions/SessionDetailModal";
 
 const Sessions = () => {
   const [sessions, setSessions] = useState(dummySessions);
@@ -37,7 +38,7 @@ const Sessions = () => {
       {sessions.length === 0 ? (
         <EmptySessions />
       ) : (
-        <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sessions.map((session) => (
             <SessionCard
               key={session.id}
@@ -50,7 +51,7 @@ const Sessions = () => {
       )}
 
       {/* Session Details */}
-      <p>Session Detail Modal</p>
+      <SessionDetailModal session={selectedSession} onClose={() => setSelectedSession(null)} />
     </main>
   );
 };

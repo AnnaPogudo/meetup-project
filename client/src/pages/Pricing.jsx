@@ -1,5 +1,4 @@
 import { PricingTable } from '@clerk/react'
-import React from 'react'
 
 const Pricing = () => {
   return (
@@ -8,7 +7,6 @@ const Pricing = () => {
         <h1 className='text-5xl font-medium tracking-tight text-purple-500'>Upgrade your plan.</h1>
         <p className='text-sm text-white mt-4'>Choose the plan that's right for you and unclock all the features of MeetUp.</p>
       </div>
-
       <PricingTable />
     </div>
   )

@@ -1,3 +1,4 @@
+import { CalendarIcon, UsersIcon, MessageSquareIcon } from "lucide-react";
 import React from "react";
 
 const SessionCard = ({ session, onOpenDetails, onRejoin }) => {
@@ -12,21 +13,59 @@ const SessionCard = ({ session, onOpenDetails, onRejoin }) => {
           </span>
 
           <span
-            className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${
-              isEnded
-                ? "bg-slate-500/5 text-slate-500"
-                : "bg-emerald-500/5 text-emerald-500"
-            }`}
+            className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${isEnded
+              ? "bg-slate-500/5 text-slate-500"
+              : "bg-emerald-500/5 text-emerald-500"
+              }`}
           >
             <span
-              className={`size-1.5 rounded-full ${
-                isEnded ? "bg-slate-400" : "bg-emerald-500"
-              }`}
+              className={`size-1.5 rounded-full ${isEnded ? "bg-slate-400" : "bg-emerald-500"
+                }`}
             />
             {isEnded ? "Ended" : "Active"}
           </span>
         </div>
+
+        <h3 className="text-xl font-medium text-slate-900 truncate">{session.title || "Instant Meeting"}</h3>
+
+        <p className="text-xs text-slate-400 flex items-center gap-1.5">
+          <CalendarIcon className="w-3.5 h-3.5" />
+          {new Date(session.createdAt).toLocaleDateString(undefined, {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+          })}
+        </p>
       </div>
+
+      <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-300/30 text-slate-900">
+        <div className="flex items-center gap-2 text-xs bg-slate-500/5 p-2.5 rounded-xl">
+          <UsersIcon className="text-primary" />
+          <span>
+            <strong className="font-semibold text-slate-900">{session.participants?.length || 0}</strong> Participants
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 text-xs bg-slate-500/5 p-2.5 rounded-xl">
+          <MessageSquareIcon className="text-primary" />
+          <span>
+            <strong className="font-semibold text-slate-900">{session.messages?.length || 0}</strong> Messages
+          </span>
+        </div>
+
+        <div className="col-span-2 flex items-center justify-between gap-3 pt-2">
+          <button onClick={() => onOpenDetails(session.id)} className="w-full bg-slate-400/40 hover:bg-slate-400/20 text-slate-800 font-medium py-2.5 px-4 rounded-full text-xs transition-all cursor-pointer text-center">
+            View Details
+          </button>
+          {!isEnded && (
+            <button onClick={() => onRejoin(session.meetingId)} className="w-full bg-primary hover:bg-primary-hover text-white font-medium py-2.5 px-4 rounded-full text-xs transition-all shadow-xs cursor-pointer text-center">
+              Re-join
+            </button>)}
+        </div>
+      </div>
+
     </div>
   );
 };
